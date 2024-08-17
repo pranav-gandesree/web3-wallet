@@ -96,6 +96,10 @@ const EthereumWalletGenerator: FC = () => {
     toast.success("All wallets deleted.");
   };
 
+  const viewBalance = () =>{
+    
+  }
+
   return (
     <Card className="w-full shadow-lg rounded-lg">
       <CardHeader>
@@ -141,6 +145,7 @@ const EthereumWalletGenerator: FC = () => {
                     <p className="font-medium text-xl">Wallet {index + 1}</p>
                     <Button
                       className="rounded-lg"
+                      variant="secondary"
                       onClick={() => handleDeleteWallet(index)}
                     >
                       Delete
@@ -154,6 +159,7 @@ const EthereumWalletGenerator: FC = () => {
                     <strong>Private Key:</strong>{" "}
                     <span className="p-2 rounded-md block">{wallet.privateKey}</span>
                   </p>
+                  <Button  variant="secondary" className="rounded-lg" onClick={viewBalance}>View Balance</Button>
                 </div>
               </div>
             ))}

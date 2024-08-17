@@ -18,6 +18,7 @@ interface Wallet {
 }
 
 const SolanaWalletGenerator: FC = () => {
+  const [balance, setBalance] = useState("");
   const [mnemonic, setMnemonic] = useState<string>("");
   const [initialMnemonic, setInitialMnemonic] = useState<string | null>(null);
   const [inputMnemonic, setInputMnemonic] = useState<string>("");
@@ -83,6 +84,32 @@ const SolanaWalletGenerator: FC = () => {
     toast.success("All wallets deleted.");
   };
 
+  const viewBalance = async (publicKey: string) => {
+    try {
+      const response = await fetch("https://mainnet.helius-rpc.com/?api-key=fc9eee85-50cd-4463-be42-5c16f7a7ed15", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "jsonrpc": "2.0",
+          "id": 1,
+          "method": "getBalance",
+          "params": [publicKey],
+        }),
+      });
+  
+      const data = await response.json();
+      const balanceData = data.result.value; // Balance in lamports
+      setBalance(balanceData)
+      toast.success(`Balance: ${balanceData / 1e9} SOL`); // Convert lamports to SOL
+    } catch (error) {
+      toast.error("Failed to fetch balance. Please try again.");
+    }
+  };
+
+  
+  
   return (
     <Card className="w-full shadow-lg rounded-lg">
       <CardHeader>
@@ -104,19 +131,22 @@ const SolanaWalletGenerator: FC = () => {
               <p>{mnemonic}</p>
             </div>
           )}
+
+          <div className="flex flex-row w-full">
           <Button
-            className="text-white rounded-lg"
+            className="rounded-md w-1/2 mr-2"
             onClick={handleGenerateWallet}
-          >
+            >
             Generate Wallet
           </Button>
 
           <Button
-            className="rounded-lg mt-4"
+            className="rounded-md w-1/2 ml-2"
             onClick={handleDeleteWallets}
-          >
+            >
             Delete All Wallets
           </Button>
+            </div>
 
           <div className="mt-6 space-y-4 text-slate-500">
             {wallets.map((wallet, index) => (
@@ -127,7 +157,9 @@ const SolanaWalletGenerator: FC = () => {
                   <div className="flex justify-between">
                     <p className="font-medium text-xl">Wallet {index + 1}</p>
                     <Button
+                      variant="secondary"
                       className="rounded-lg"
+                      
                       onClick={() => {
                         const updatedWallets = wallets.filter((_, i) => i !== index);
                         setWallets(updatedWallets);
@@ -152,7 +184,12 @@ const SolanaWalletGenerator: FC = () => {
                     <strong>Private Key:</strong>{" "}
                     <span className="p-2 rounded-md block">{wallet.privateKey}</span>
                   </p>
+                  <div className="flex flex-row items-center gap-6">
+                  <Button  variant="secondary" className="rounded-lg" onClick={()=>{viewBalance(wallet.publicKey)}}>View Balance</Button>
+                  <p className="items-center">{balance} Sol</p>
+                  </div>
                 </div>
+            
               </div>
             ))}
           </div>
