@@ -24,6 +24,8 @@ const SolanaWalletGenerator: FC = () => {
   const [inputMnemonic, setInputMnemonic] = useState<string>("");
   const [wallets, setWallets] = useState<Wallet[]>([]);
 
+ const SOL_RPC_URL = process.env.NEXT_PUBLIC_SOL_RPC!;
+
   useEffect(() => {
     const storedWallets = localStorage.getItem("solanaWallets");
     if (storedWallets) {
@@ -86,7 +88,7 @@ const SolanaWalletGenerator: FC = () => {
 
   const viewBalance = async (publicKey: string) => {
     try {
-      const response = await fetch("https://mainnet.helius-rpc.com/?api-key=fc9eee85-50cd-4463-be42-5c16f7a7ed15", {
+      const response = await fetch(SOL_RPC_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
