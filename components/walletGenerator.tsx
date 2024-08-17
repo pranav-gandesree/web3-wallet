@@ -159,7 +159,7 @@ const SolanaWalletGenerator: FC = () => {
                   <div className="flex justify-between">
                     <p className="font-medium text-xl">Wallet {index + 1}</p>
                     <Button
-                      variant="secondary"
+                      // variant="secondary"
                       className="rounded-lg"
                       
                       onClick={() => {
@@ -187,7 +187,9 @@ const SolanaWalletGenerator: FC = () => {
                     <span className="p-2 rounded-md block">{wallet.privateKey}</span>
                   </p>
                   <div className="flex flex-row items-center gap-6">
-                  <Button  variant="secondary" className="rounded-lg" onClick={()=>{viewBalance(wallet.publicKey)}}>View Balance</Button>
+                  <Button 
+                  //  variant="secondary" 
+                  className="rounded-lg" onClick={()=>{viewBalance(wallet.publicKey)}}>View Balance</Button>
                   <p className="items-center">{balance} Sol</p>
                   </div>
                 </div>
